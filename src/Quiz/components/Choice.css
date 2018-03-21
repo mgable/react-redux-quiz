@@ -1,0 +1,9 @@
+li label {
+	cursor: pointer;
+}
+
+.yes {
+  color: green; }
+
+.no {
+  color: red; }
