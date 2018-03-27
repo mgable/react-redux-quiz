@@ -42,14 +42,8 @@ import _ from 'underscore';
  function _fetchData(){
  	return new Promise((resolve, reject) => {
  		Search.getBreeds().then((response) => {
- 			console.info("I got the breeds !!!!!!!!!!!!");
- 			console.info(response);
-
  			resolve (response)
- 			
  		}, (error) => {
- 			console.info("I got and error 2");
- 			console.info(error);
  			reject(error)
  		});	
  	});
@@ -57,14 +51,10 @@ import _ from 'underscore';
 
  const _makeQuiz = (breeds) => {
  	return new Promise((resolve, reject) => {
- 		console.info("I am really making the quiz");
-		console.info(breeds);
-		var quiz = [], numOfQuestions = 1,
-			rawBreedsList = Object.keys(breeds.message),
-			breed,
-			otherBreeds;
+		var quiz = [], numOfQuestions = 4,
+			rawBreedsList = Object.keys(breeds.message);
 
-		while(numOfQuestions-- >= 0){
+		while(numOfQuestions-- > 0){
 			quiz.push(_makeQuestion(rawBreedsList));
 		}
 
@@ -85,13 +75,22 @@ const _makeQuestion = (rawBreedsList) => {
 			question = {
 				choiceList,
 				answer: _makeAnswer(choiceList, breed),
-				image: "https://dummyimage.com/150x250/000/fff",
+				image: null,
 				response: null
 			}
 
-		console.info(choiceList);
+		_getImage(breed).then((image) => {
+			question.image = image
+			resolve(question);
+		}, (error) => {
+			reject(error);
+		});
+	});
+}
 
-		resolve(question);
+const _getImage = (breed) => {
+	return Search.getRandomBreedImage(breed).then((image) => {
+		return image.message;
 	});
 }
 
@@ -105,7 +104,6 @@ const _makeChoiceList = (breed, otherBreeds) => {
 }
 
 const _makeAnswer = (choiceList, breed) => {
-	// _.indexOf(choiceList, _.findWhere(choiceList, {"text": breed})),
 	var answer;
 
 	for (let i = 0; i < choiceList.length; i++){
