@@ -28,7 +28,7 @@ const Choice = ({onClick, text, response, index, currentSelection}) => {
 	return (
 		<li className={klass}  onClick={onClick}>
 			<label>
-				<input checked={index === currentSelection} type="radio" name="question"  value={text}/>{text} {correct}
+				<input checked={index === currentSelection} type="radio" name="question"  value={text}/>&nbsp;{text} {correct}
 			</label>
 		</li>
 	)

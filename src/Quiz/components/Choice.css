@@ -1,5 +1,6 @@
 li label {
 	cursor: pointer;
+	text-transform: capitalize;
 }
 
 .yes {
