@@ -52,42 +52,23 @@ import _ from 'underscore';
  			console.info(error);
  			reject(error)
  		});	
- 		// fetch('//api.github.com/users/lquixada')
- 		// .then(res => {
- 		// 	if (res.status >= 400) {
- 		// 		throw new Error("Bad response from server");
- 		// 	}
- 		// 	return res.json();
- 		// })
- 		// .then(user => {
- 		// 	console.log(user);
- 		// })
- 		// .catch(err => {
- 		// 	console.error(err);
- 		// });
  	});
  }
 
  const _makeQuiz = (breeds) => {
  	return new Promise((resolve, reject) => {
  		console.info("I am really making the quiz");
-		console.info("the breeds");
 		console.info(breeds);
 		var quiz = [], numOfQuestions = 1,
 			rawBreedsList = Object.keys(breeds.message),
 			breed,
 			otherBreeds;
 
-		console.info("the raw bredds");
-		console.info(rawBreedsList);
-
 		while(numOfQuestions-- >= 0){
 			quiz.push(_makeQuestion(rawBreedsList));
 		}
 
 		Promise.all(quiz).then((response) => {
-			console.info("promises all response");
-			console.info(response);
 			resolve(response);
 		}, (error) => {
 			reject(error)
@@ -100,12 +81,15 @@ const _makeQuestion = (rawBreedsList) => {
 	return new Promise((resolve, reject) => {
 		let breed = _pickRandomBreed(rawBreedsList),
 			otherBreeds = _pickRandomBreed(rawBreedsList, 3, breed),
+			choiceList = _makeChoiceList(breed, otherBreeds), 
 			question = {
-				choiceList: _makeChoiceList(breed, otherBreeds), 
-				answer: 2,
+				choiceList,
+				answer: _.indexOf(choiceList, _.findWhere(choiceList, {"text": breed})),
 				image: "https://dummyimage.com/150x250/000/fff",
 				response: null
 			}
+
+		console.info(choiceList);
 
 		resolve(question);
 	});
