@@ -84,7 +84,7 @@ const _makeQuestion = (rawBreedsList) => {
 			choiceList = _makeChoiceList(breed, otherBreeds), 
 			question = {
 				choiceList,
-				answer: _.indexOf(choiceList, _.findWhere(choiceList, {"text": breed})),
+				answer: _makeAnswer(choiceList, breed),
 				image: "https://dummyimage.com/150x250/000/fff",
 				response: null
 			}
@@ -101,7 +101,20 @@ const _makeChoiceList = (breed, otherBreeds) => {
 			return {text: breed, id: idx};
 		});
 
-	return results
+	return _.shuffle(results);
+}
+
+const _makeAnswer = (choiceList, breed) => {
+	// _.indexOf(choiceList, _.findWhere(choiceList, {"text": breed})),
+	var answer;
+
+	for (let i = 0; i < choiceList.length; i++){
+		if (choiceList[i].text === breed){
+			answer = i;
+			break;
+		}
+	}
+	return answer;
 }
 
 const _pickRandomBreed = (_rawBreedsList, howMany = 1, omit) => {
