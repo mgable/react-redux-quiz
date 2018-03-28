@@ -9,6 +9,7 @@ import _ from 'underscore';
  export const NEXT_QUESTION = 'NEXT_QUESTION'
  export const MAKE_QUIZ = 'MAKE_QUIZ'
  export const QUIZ_READY = 'QUIZ_READY'
+ export const STATES = {START: "START", LOADED: "LOADED", FINISH: "FINISH"}
 
 /*
  * action creators

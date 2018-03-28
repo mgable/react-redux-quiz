@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux'
-import { SUBMIT_ANSWER, NEXT_QUESTION, MAKE_QUIZ, QUIZ_READY } from './actions'
+import { SUBMIT_ANSWER, NEXT_QUESTION, MAKE_QUIZ, QUIZ_READY, STATES } from './actions'
 import _ from 'underscore'
 
  
 const initialState = {
-	loaded: false,
+	status: STATES.START,
+	current: 1,
 	currentQuestion: 0,
 	currentSelection: null,
 	wrong: 0,
@@ -56,7 +57,7 @@ function quiz(state = initialState, action) {
 }
 
 function broadcastQuiz(state, action){
-	state.loaded = true;
+	state.status = STATES.LOADED;
 	return _.extend({}, state);
 }
 
@@ -64,7 +65,7 @@ function broadcastQuiz(state, action){
 function checkAnswer(state, action){
 	var question = state.questions[state.currentQuestion]
 	question.response = (question.answer === action.answer) ? question.answer : false;
-	if (question.response) {
+	if (question.response !== false) {
 		state.correct += 1;
 	} else {
 		state.wrong += 1;
@@ -78,11 +79,11 @@ function advanceQuiz(state, action){
 		state.currentQuestion += 1;
 		state.currentSelection = null;
 		console.info("next Question");
-		return _.extend({}, state);
 	} else {
 		console.info("end");
-		return state;
+		state.status = STATES.FINISH;
 	}
+	return _.extend({}, state);
 }
 
 

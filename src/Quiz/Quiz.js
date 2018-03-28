@@ -37,7 +37,7 @@ const getTotal = (state) => {
 }
 
 const getLoaded = (state) => {
-	return state.quiz.loaded;
+	return state.quiz.status;
 }
 
 const getWrong = (state) => {
@@ -48,15 +48,20 @@ const getCorrect = (state) => {
 	return state.quiz.correct;
 }
 
+const getCurrent = (state) => {
+	return state.quiz.currentQuestion + 1;
+}
+
 const mapStateToProps = state => {
 	return {
 		choices: getChoices(state),
 		image: getImage(state),
 		response: getResponse(state),
+		current: getCurrent(state),
 		currentQuestion: getCurrentQuestion(state),
 		currentSelection: getCurrentSelection(state),
 		total: getTotal(state),
-		loaded: getLoaded(state),
+		status: getLoaded(state),
 		wrong: getWrong(state),
 		correct: getCorrect(state)
 	}
