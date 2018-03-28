@@ -32,6 +32,22 @@ const getCurrentSelection = (state) => {
 	return state.quiz.currentSelection
 }
 
+const getTotal = (state) => {
+	return state.quiz.questions.length;
+}
+
+const getLoaded = (state) => {
+	return state.quiz.loaded;
+}
+
+const getWrong = (state) => {
+	return state.quiz.wrong;
+}
+
+const getCorrect = (state) => {
+	return state.quiz.correct;
+}
+
 const mapStateToProps = state => {
 	return {
 		choices: getChoices(state),
@@ -39,6 +55,10 @@ const mapStateToProps = state => {
 		response: getResponse(state),
 		currentQuestion: getCurrentQuestion(state),
 		currentSelection: getCurrentSelection(state),
+		total: getTotal(state),
+		loaded: getLoaded(state),
+		wrong: getWrong(state),
+		correct: getCorrect(state)
 	}
 }
 

@@ -1,11 +1,14 @@
 import { combineReducers } from 'redux'
-import { SUBMIT_ANSWER, NEXT_QUESTION, MAKE_QUIZ } from './actions'
+import { SUBMIT_ANSWER, NEXT_QUESTION, MAKE_QUIZ, QUIZ_READY } from './actions'
 import _ from 'underscore'
 
  
 const initialState = {
+	loaded: false,
 	currentQuestion: 0,
 	currentSelection: null,
+	wrong: 0,
+	correct: 0,
 	questions: [{
 		choiceList: [], 
 		answer: null,
@@ -44,22 +47,33 @@ function makeQuiz(state, action){
  
 function quiz(state = initialState, action) {
 	switch(action.type){
-		case SUBMIT_ANSWER: return r(state, action)
-		case NEXT_QUESTION: return q(state, action)
+		case SUBMIT_ANSWER: return checkAnswer(state, action)
+		case NEXT_QUESTION: return advanceQuiz(state, action)
 		case MAKE_QUIZ: return makeQuiz(state, action)
+		case QUIZ_READY: return broadcastQuiz(state, action)
 		default: return state
 	}  
 }
 
+function broadcastQuiz(state, action){
+	state.loaded = true;
+	return _.extend({}, state);
+}
 
-function r(state, action){
+
+function checkAnswer(state, action){
 	var question = state.questions[state.currentQuestion]
 	question.response = (question.answer === action.answer) ? question.answer : false;
+	if (question.response) {
+		state.correct += 1;
+	} else {
+		state.wrong += 1;
+	}
 	state.currentSelection = action.answer;
 	return _.extend({}, state);
 }
 
-function q(state, action){
+function advanceQuiz(state, action){
 	if (state.currentQuestion < (state.questions.length - 1)){
 		state.currentQuestion += 1;
 		state.currentSelection = null;

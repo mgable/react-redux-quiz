@@ -8,6 +8,7 @@ import _ from 'underscore';
  export const SUBMIT_ANSWER = 'SUBMIT_ANSWER'
  export const NEXT_QUESTION = 'NEXT_QUESTION'
  export const MAKE_QUIZ = 'MAKE_QUIZ'
+ export const QUIZ_READY = 'QUIZ_READY'
 
 /*
  * action creators
@@ -15,6 +16,10 @@ import _ from 'underscore';
 
  export function submitAnswer(answer) {
  	return { type: SUBMIT_ANSWER, answer }
+ }
+
+  export function quizReady() {
+ 	return { type: QUIZ_READY }
  }
 
  export function nextQuestion() {
@@ -34,7 +39,7 @@ import _ from 'underscore';
  			response => _makeQuiz(response),
  			error => console.log('An error occurred.', error)
  			)
- 		.then(json => dispatch(makeQuiz(json))
+ 		.then(json => { dispatch(makeQuiz(json));dispatch(quizReady()) }
  			)
  	}
  }
